@@ -27,13 +27,17 @@ export default function Index() {
   return (
     <div
       style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}
-      className="p-4"
+      className="p-4 w-[40%] mx-auto"
     >
       <h1 className="text-xl py-4">Github Trend</h1>
       <ul>
+        <li className="flex leading-8">
+          <span className="w-20 shrink-0">Stars</span>
+          <div>Name</div>
+        </li>
         {data.map((item) => (
-          <li key={item.id} className="flex">
-            <span className="w-20">{item.star}</span>
+          <li key={item.id} className="flex leading-8">
+            <span className="w-20 shrink-0">{item.star}</span>
             <a
               target="_blank"
               href={item.url!}
