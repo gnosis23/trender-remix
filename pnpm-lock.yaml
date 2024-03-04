@@ -6,10 +6,12 @@ specifiers:
   '@remix-run/node': ^2.8.0
   '@remix-run/react': ^2.8.0
   '@remix-run/serve': ^2.8.0
+  '@types/bcryptjs': ^2.4.6
   '@types/react': ^18.2.20
   '@types/react-dom': ^18.2.7
   '@typescript-eslint/eslint-plugin': ^6.7.4
   '@typescript-eslint/parser': ^6.7.4
+  bcryptjs: ^2.4.3
   drizzle-orm: ^0.29.4
   eslint: ^8.38.0
   eslint-import-resolver-typescript: ^3.6.1
@@ -29,6 +31,7 @@ dependencies:
   '@remix-run/node': 2.8.0_typescript@5.3.3
   '@remix-run/react': 2.8.0_3lfo6mjrbe7gnpm2z32jgk7g6a
   '@remix-run/serve': 2.8.0_typescript@5.3.3
+  bcryptjs: 2.4.3
   drizzle-orm: 0.29.4_myvgl3bpzenhmvetyfffl4ugmi
   isbot: 4.4.0
   mysql2: 3.9.2
@@ -37,6 +40,7 @@ dependencies:
 
 devDependencies:
   '@remix-run/dev': 2.8.0_ap537tih67l7g6xu5wenqg7plu
+  '@types/bcryptjs': 2.4.6
   '@types/react': 18.2.61
   '@types/react-dom': 18.2.19
   '@typescript-eslint/eslint-plugin': 6.21.0_ue4opsjrgmbcyesuxmv4s7c57m
@@ -1338,6 +1342,10 @@ packages:
       '@types/estree': 1.0.5
     dev: true
 
+  /@types/bcryptjs/2.4.6:
+    resolution: { integrity: sha512-9xlo6R2qDs5uixm0bcIqCeMCE6HiQsIyel9KQySStiyqNl2tnj2mP3DX1Nf56MD6KMenNNlBBsy3LJ7gUEQPXQ== }
+    dev: true
+
   /@types/cookie/0.6.0:
     resolution: {integrity: sha512-4Kh9a6B2bQciAhf7FSuMRRkUWecJgJu9nPnx3yzpsfXX/c50REIqpHY4C82bXP90qrLtXtkDxTZosYO3UpOwlA==}
 
@@ -1857,6 +1865,10 @@ packages:
     engines: {node: '>= 0.8'}
     dependencies:
       safe-buffer: 5.1.2
+
+  /bcryptjs/2.4.3:
+    resolution: { integrity: sha512-V/Hy/X9Vt7f3BbPJEi8BdVFMByHi+jNXrYkW3huaybV/kQ0KJg0Y6PkEMbn+zeT+i+SiKZ/HMqJGIIt4LZDqNQ== }
+    dev: false
 
   /binary-extensions/2.2.0:
     resolution: {integrity: sha512-jDctJ/IVQbZoJykoeHbhXpOlNBqGNcwXJKJog42E5HDPUwQTSdjCHdihjj0DlnheQ7blbT6dHOafNAiS8ooQKA==}
