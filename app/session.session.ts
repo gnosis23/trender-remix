@@ -1,6 +1,7 @@
 import { createCookieSessionStorage, redirect } from "@remix-run/node";
 
 export type UserSessionData = {
+  userId: number;
   username: string;
 };
 
@@ -17,14 +18,34 @@ export const userSessionStorage = createCookieSessionStorage<UserSessionData>({
   },
 });
 
-export const auth = async (request: Request) => {
-  const session = await userSessionStorage.getSession(
-    request.headers.get("Cookie")
-  );
-  return {
-    username: session.get("username"),
-  } as UserSessionData;
-};
+export async function createUserSession(
+  userId: number,
+  username: string,
+  redirectTo: string
+) {
+  const session = await userSessionStorage.getSession();
+  session.set("userId", userId);
+  session.set("username", username);
+
+  return redirect(redirectTo, {
+    headers: {
+      "Set-Cookie": await userSessionStorage.commitSession(session),
+    },
+  });
+}
+
+export async function requireUser(
+  request: Request,
+  redirectTo: string = new URL(request.url).pathname
+) {
+  const session = await getUserSession(request);
+  const userId = session.get("userId");
+  if (!userId || typeof userId !== "number") {
+    const searchParams = new URLSearchParams([["redirectTo", redirectTo]]);
+    throw redirect(`/signin?${searchParams}`);
+  }
+  return { userId, username: session.get("username") } as UserSessionData;
+}
 
 function getUserSession(request: Request) {
   return userSessionStorage.getSession(request.headers.get("Cookie"));

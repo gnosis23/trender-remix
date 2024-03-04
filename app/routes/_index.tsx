@@ -2,7 +2,7 @@ import { json, LoaderFunctionArgs, type MetaFunction } from "@remix-run/node";
 import { Form, Link, useLoaderData } from "@remix-run/react";
 import { desc, gt } from "drizzle-orm";
 import { RepositorySchema, db } from "~/db/config.server";
-import { auth } from "~/session.session";
+import { requireUser } from "~/session.session";
 
 export const meta: MetaFunction = () => {
   return [
@@ -21,7 +21,7 @@ export const loader = async (c: LoaderFunctionArgs) => {
     .orderBy(desc(RepositorySchema.star))
     .limit(50);
 
-  const user = await auth(c.request);
+  const user = await requireUser(c.request);
 
   return json({
     repositories,

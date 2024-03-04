@@ -8,7 +8,7 @@ import { Form, Link, useActionData } from "@remix-run/react";
 import bcrypt from "bcryptjs";
 import { eq } from "drizzle-orm";
 import { db, UserSchema } from "~/db/config.server";
-import { userSessionStorage } from "~/session.session";
+import { createUserSession, userSessionStorage } from "~/session.session";
 
 export const action = async (c: ActionFunctionArgs) => {
   const formData = await c.request.formData();
@@ -21,7 +21,8 @@ export const action = async (c: ActionFunctionArgs) => {
     .from(UserSchema)
     .where(eq(UserSchema.username, username));
 
-  if (!users[0] || !(await bcrypt.compare(password, users[0].password!))) {
+  const user = users[0];
+  if (!user || !(await bcrypt.compare(password, user.password!))) {
     return json({
       success: false,
       errors: {
@@ -30,16 +31,7 @@ export const action = async (c: ActionFunctionArgs) => {
     });
   }
 
-  const session = await userSessionStorage.getSession(
-    c.request.headers.get("Cookie")
-  );
-  session.set("username", username);
-
-  return redirect("/", {
-    headers: {
-      "Set-Cookie": await userSessionStorage.commitSession(session),
-    },
-  });
+  return await createUserSession(user.id, username, "/");
 };
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -47,12 +39,15 @@ export async function loader({ request }: LoaderFunctionArgs) {
     request.headers.get("Cookie")
   );
 
-  if (session.has("username")) {
+  if (session.has("userId")) {
     // Redirect to the home page if they are already signed in.
     return redirect("/");
   }
 
-  const data = { username: session.get("username") };
+  const data = {
+    userId: session.get("userId"),
+    username: session.get("username"),
+  };
 
   return json(data, {
     headers: {
