@@ -120,6 +120,17 @@ export default function Index() {
               {item.like === 1 ? "★" : "☆"}
             </div>
           );
+        case "name":
+          return (
+            <a
+              target="_blank"
+              href={item.url!}
+              rel="noreferrer"
+              className="text-blue-400"
+            >
+              {item.name}
+            </a>
+          );
         default:
           return cellValue;
       }
