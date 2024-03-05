@@ -66,10 +66,13 @@ export default function Signin() {
       <h1 className="text-xl mb-4">Login</h1>
       <Form method="post" className="rounded-2xl bg-gray-200 p-4 w-96">
         <div className="p-2 flex flex-col gap-3">
-          <Input id="username" name="username" label="Username" />
-          {errors?.username ? (
-            <p className="text-red-500 my-2">{errors.username}</p>
-          ) : null}
+          <Input
+            id="username"
+            name="username"
+            label="Username"
+            isInvalid={!!errors?.username}
+            errorMessage={errors?.username}
+          />
 
           <Input
             id="password"

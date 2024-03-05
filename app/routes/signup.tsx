@@ -79,20 +79,23 @@ export default function Signup() {
       <h1 className="text-xl mb-4">Sign Up</h1>
       <Form method="post" className="rounded-2xl bg-gray-200 p-4 w-96">
         <div className="p-2 flex flex-col gap-3">
-          <Input id="username" name="username" label="Username" />
-          {errors?.username ? (
-            <p className="text-red-500 my-2">{errors.username}</p>
-          ) : null}
+          <Input
+            id="username"
+            name="username"
+            label="Username"
+            isInvalid={!!errors?.username}
+            errorMessage={errors?.username}
+          />
 
           <Input
             id="password"
             type="password"
             name="password"
             label="password"
+            isInvalid={!!errors?.password}
+            errorMessage={errors?.password}
           />
-          {errors?.username ? (
-            <p className="text-red-500 my-2">{errors.username}</p>
-          ) : null}
+
           {errors?.other ? (
             <p className="text-red-500 my-2">{errors.other}</p>
           ) : null}
