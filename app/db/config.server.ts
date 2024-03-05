@@ -7,7 +7,7 @@ import {
 } from "drizzle-orm/mysql-core";
 import { drizzle } from "drizzle-orm/mysql2";
 import mysql from "mysql2/promise";
-import { desc, eq, gt } from "drizzle-orm";
+import { and, desc, eq, gt, isNotNull } from "drizzle-orm";
 
 // Create the connection
 const poolConnection = mysql.createPool(process.env.DATABASE_URL as string);
@@ -19,11 +19,11 @@ export const RepositorySchema = mysqlTable("repository", {
   language: varchar("language", { length: 64 }),
   ownerName: varchar("owner_name", { length: 64 }),
   ownerUrl: varchar("owner_url", { length: 128 }),
-  name: varchar("name", { length: 64 }),
-  star: int("star"),
-  description: varchar("description", { length: 256 }),
-  url: varchar("url", { length: 256 }),
-  created: timestamp("created"),
+  name: varchar("name", { length: 64 }).notNull(),
+  star: int("star").notNull(),
+  description: varchar("description", { length: 256 }).notNull(),
+  url: varchar("url", { length: 256 }).notNull(),
+  created: timestamp("created").defaultNow(),
 });
 
 export const UserSchema = mysqlTable("user", {
@@ -34,11 +34,20 @@ export const UserSchema = mysqlTable("user", {
 
 export const LikeSchema = mysqlTable("like", {
   id: serial("id").primaryKey(),
-  userId: int("user_id"),
-  repoId: int("repo_id"),
-  like: int("like"),
-  created: timestamp("created"),
+  userId: int("user_id").notNull(),
+  repoId: int("repo_id").notNull(),
+  like: int("like").notNull(),
+  created: timestamp("created").defaultNow(),
 });
+
+export type TRepository = {
+  id: number;
+  name: string;
+  star: number;
+  url: string;
+  language: string;
+  like: number;
+};
 
 export const fetchRepositories = async (date: Date, userId: number) => {
   const like = db
@@ -52,11 +61,17 @@ export const fetchRepositories = async (date: Date, userId: number) => {
       name: RepositorySchema.name,
       star: RepositorySchema.star,
       url: RepositorySchema.url,
+      language: RepositorySchema.language,
       like: LikeSchema.like,
     })
     .from(RepositorySchema)
     .leftJoin(like, eq(RepositorySchema.id, like.repoId))
-    .where(gt(RepositorySchema.created, date))
+    .where(
+      and(
+        gt(RepositorySchema.created, date),
+        isNotNull(RepositorySchema.language),
+      ),
+    )
     .orderBy(desc(RepositorySchema.star))
-    .limit(50);
+    .limit(50) as Promise<TRepository[]>;
 };
