@@ -3,6 +3,7 @@ import { createCookieSessionStorage, redirect } from "@remix-run/node";
 export type UserSessionData = {
   userId: number;
   username: string;
+  message?: string;
 };
 
 export const userSessionStorage = createCookieSessionStorage<UserSessionData>({
