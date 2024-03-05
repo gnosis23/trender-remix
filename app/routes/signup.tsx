@@ -48,7 +48,16 @@ export const action = async (c: ActionFunctionArgs) => {
     });
   }
 
-  return redirect("/signin");
+  const session = await userSessionStorage.getSession(
+    c.request.headers.get("Cookie"),
+  );
+  session.flash("message", "sign up success!");
+
+  return redirect("/signin", {
+    headers: {
+      "Set-Cookie": await userSessionStorage.commitSession(session),
+    },
+  });
 };
 
 export async function loader({ request }: LoaderFunctionArgs) {

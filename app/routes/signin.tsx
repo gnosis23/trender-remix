@@ -4,7 +4,7 @@ import {
   LoaderFunctionArgs,
   redirect,
 } from "@remix-run/node";
-import { Form, Link, useActionData } from "@remix-run/react";
+import { Form, Link, useActionData, useLoaderData } from "@remix-run/react";
 import { Button, Input } from "@nextui-org/react";
 import bcrypt from "bcryptjs";
 import { eq } from "drizzle-orm";
@@ -46,8 +46,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   }
 
   const data = {
-    userId: session.get("userId"),
-    username: session.get("username"),
+    message: session.get("message"),
   };
 
   return json(data, {
@@ -59,6 +58,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export default function Signin() {
   const actionData = useActionData<typeof action>();
+  const { message } = useLoaderData<typeof loader>();
   const errors = actionData?.errors;
 
   return (
@@ -66,6 +66,10 @@ export default function Signin() {
       <h1 className="text-xl mb-4">Login</h1>
       <Form method="post" className="rounded-2xl bg-gray-200 p-4 w-96">
         <div className="p-2 flex flex-col gap-3">
+          {message ? (
+            <p className="p-2 bg-yellow-400 text-white rounded-md">{message}</p>
+          ) : null}
+
           <Input
             id="username"
             name="username"
