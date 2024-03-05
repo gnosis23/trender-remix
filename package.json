@@ -11,16 +11,19 @@
     "typecheck": "tsc"
   },
   "dependencies": {
+    "@nextui-org/react": "^2.2.10",
     "@remix-run/css-bundle": "^2.8.0",
     "@remix-run/node": "^2.8.0",
     "@remix-run/react": "^2.8.0",
     "@remix-run/serve": "^2.8.0",
     "bcryptjs": "^2.4.3",
     "drizzle-orm": "^0.29.4",
+    "framer-motion": "^11.0.8",
     "isbot": "^4.1.0",
     "mysql2": "^3.9.2",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "tailwind-variants": "^0.2.0"
   },
   "devDependencies": {
     "@remix-run/dev": "^2.8.0",

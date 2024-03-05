@@ -5,6 +5,7 @@ import {
   redirect,
 } from "@remix-run/node";
 import { Form, Link, useActionData } from "@remix-run/react";
+import { Button, Input } from "@nextui-org/react";
 import bcrypt from "bcryptjs";
 import { eq } from "drizzle-orm";
 import { db, UserSchema } from "~/db/config.server";
@@ -36,7 +37,7 @@ export const action = async (c: ActionFunctionArgs) => {
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const session = await userSessionStorage.getSession(
-    request.headers.get("Cookie")
+    request.headers.get("Cookie"),
   );
 
   if (session.has("userId")) {
@@ -63,39 +64,28 @@ export default function Signin() {
   return (
     <div className="flex flex-col items-center justify-center pt-12 w-[40%] mx-auto">
       <h1 className="text-xl mb-4">Login</h1>
-      <Form method="post" className="rounded-2xl bg-gray-200 p-6 w-96">
-        <label htmlFor="username" className="text-blue-600 font-semibold">
-          Username
-        </label>
-        <input
-          type="text"
-          id="username"
-          name="username"
-          className="w-full p-2 rounded-xl my-2"
-        />
-        {errors?.username ? (
-          <p className="text-red-500 my-2">{errors.username}</p>
-        ) : null}
+      <Form method="post" className="rounded-2xl bg-gray-200 p-4 w-96">
+        <div className="p-2 flex flex-col gap-3">
+          <Input id="username" name="username" label="Username" />
+          {errors?.username ? (
+            <p className="text-red-500 my-2">{errors.username}</p>
+          ) : null}
 
-        <label htmlFor="password" className="text-blue-600 font-semibold">
-          Password
-        </label>
-        <input
-          type="password"
-          id="password"
-          name="password"
-          className="w-full p-2 rounded-xl my-2"
-        />
-
-        <div className="w-full text-center">
-          <input
-            type="submit"
-            className="rounded-xl mt-2 bg-yellow-300 px-3 py-2 text-blue-600 font-semibold transition duration-300 ease-in-out hover:bg-yellow-400 hover:-translate-y-1"
-            value="Sign In"
+          <Input
+            id="password"
+            type="password"
+            name="password"
+            label="password"
           />
-          <Link to="/signup" className="ml-4 text-xs">
-            Sign Up
-          </Link>
+
+          <div className="w-full text-center">
+            <Button color="primary" type="submit">
+              Sign In
+            </Button>
+            <Link to="/signup" className="ml-4 text-xs">
+              Sign Up
+            </Link>
+          </div>
         </div>
       </Form>
     </div>

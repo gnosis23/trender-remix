@@ -9,6 +9,7 @@ import {
   ScrollRestoration,
 } from "@remix-run/react";
 import styles from "./tailwind.css";
+import { NextUIProvider } from "@nextui-org/react";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: styles },
@@ -25,7 +26,9 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <Outlet />
+        <NextUIProvider>
+          <Outlet />
+        </NextUIProvider>
         <ScrollRestoration />
         <Scripts />
         <LiveReload />
