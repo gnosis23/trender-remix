@@ -48,7 +48,7 @@ CREATE TABLE `repository` (
   `owner_url` varchar(128) DEFAULT NULL,
   `name` varchar(64) NOT NULL,
   `star` int DEFAULT '0',
-  `description` varchar(256) DEFAULT NULL,
+  `description` TEXT DEFAULT NULL,
   `url` varchar(256) DEFAULT NULL,
   `created` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
