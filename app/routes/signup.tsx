@@ -4,7 +4,7 @@ import {
   LoaderFunctionArgs,
   redirect,
 } from "@remix-run/node";
-import { Form, useActionData } from "@remix-run/react";
+import { Form, useActionData, useNavigation } from "@remix-run/react";
 import bcrypt from "bcryptjs";
 import { db, UserSchema } from "~/db/config.server";
 import { userSessionStorage } from "~/session.session";
@@ -83,6 +83,8 @@ export default function Signup() {
   const actionData = useActionData<typeof action>();
   const errors = actionData?.errors;
 
+  const navigation = useNavigation();
+
   return (
     <div className="flex flex-col items-center justify-center pt-12 w-[40%] mx-auto">
       <h1 className="text-xl mb-4">Sign Up</h1>
@@ -110,7 +112,11 @@ export default function Signup() {
           ) : null}
 
           <div className="w-full text-center">
-            <Button color="primary" type="submit">
+            <Button
+              color="primary"
+              type="submit"
+              isLoading={navigation.state === "submitting"}
+            >
               Sign Up
             </Button>
           </div>

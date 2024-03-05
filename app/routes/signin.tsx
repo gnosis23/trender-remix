@@ -4,7 +4,13 @@ import {
   LoaderFunctionArgs,
   redirect,
 } from "@remix-run/node";
-import { Form, Link, useActionData, useLoaderData } from "@remix-run/react";
+import {
+  Form,
+  Link,
+  useActionData,
+  useLoaderData,
+  useNavigation,
+} from "@remix-run/react";
 import { Button, Input } from "@nextui-org/react";
 import bcrypt from "bcryptjs";
 import { eq } from "drizzle-orm";
@@ -61,6 +67,8 @@ export default function Signin() {
   const { message } = useLoaderData<typeof loader>();
   const errors = actionData?.errors;
 
+  const navigation = useNavigation();
+
   return (
     <div className="flex flex-col items-center justify-center pt-12 w-[40%] mx-auto">
       <h1 className="text-xl mb-4">Login</h1>
@@ -86,7 +94,11 @@ export default function Signin() {
           />
 
           <div className="w-full text-center">
-            <Button color="primary" type="submit">
+            <Button
+              color="primary"
+              type="submit"
+              isLoading={navigation.state === "submitting"}
+            >
               Sign In
             </Button>
             <Link to="/signup" className="ml-4 text-xs">
