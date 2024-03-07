@@ -4,7 +4,7 @@ import {
   LoaderFunctionArgs,
   type MetaFunction,
 } from "@remix-run/node";
-import { useFetcher, useLoaderData, useNavigation } from "@remix-run/react";
+import { useFetcher, useLoaderData } from "@remix-run/react";
 import { fetchRepositories } from "~/db/home.server";
 import { requireUser } from "~/session.session";
 import { addLike, fetchLike, updateLike } from "~/db/like.server";
@@ -56,10 +56,8 @@ export default function Index() {
   const data = useLoaderData<typeof loader>();
   const fetcher = useFetcher();
 
-  const navigation = useNavigation();
-
   const onFavor = (id: number, favor: string) => {
-    if (navigation.state === "submitting") return;
+    if (fetcher.state === "submitting") return;
     fetcher.submit(
       { id, favor },
       {
