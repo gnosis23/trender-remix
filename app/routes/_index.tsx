@@ -82,7 +82,7 @@ export default function Index() {
             like = fetcher.formData.get("favor") === "1" ? 1 : 0;
           }
           return (
-            <div key={repo.id} className="flex py-1">
+            <div key={repo.id} className="flex py-1 gap-x-1 text-sm">
               <div className="w-8 shrink-0">
                 <button
                   className="w-6 mr-6 cursor-pointer text-yellow-500"
