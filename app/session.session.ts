@@ -35,6 +35,10 @@ export async function createUserSession(
   });
 }
 
+function getUserSession(request: Request) {
+  return userSessionStorage.getSession(request.headers.get("Cookie"));
+}
+
 export async function requireUser(
   request: Request,
   redirectTo: string = new URL(request.url).pathname
@@ -46,10 +50,6 @@ export async function requireUser(
     throw redirect(`/signin?${searchParams}`);
   }
   return { userId, username: session.get("username") } as UserSessionData;
-}
-
-function getUserSession(request: Request) {
-  return userSessionStorage.getSession(request.headers.get("Cookie"));
 }
 
 export async function logout(request: Request) {

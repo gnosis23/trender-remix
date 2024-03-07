@@ -5,7 +5,7 @@ import {
   type MetaFunction,
 } from "@remix-run/node";
 import { useFetcher, useLoaderData, useNavigation } from "@remix-run/react";
-import { fetchRepositories, TRepository } from "~/db/config.server";
+import { fetchRepositories, TRepository } from "~/db/home.server";
 import { requireUser } from "~/session.session";
 import { addLike, fetchLike, updateLike } from "~/db/like.server";
 import {
