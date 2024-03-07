@@ -5,7 +5,6 @@ import {
   type MetaFunction,
 } from "@remix-run/node";
 import {
-  Form,
   Link,
   useFetcher,
   useLoaderData,
@@ -23,6 +22,7 @@ import {
   TableRow,
 } from "@nextui-org/react";
 import React, { Key } from "react";
+import Header from "~/components/Header";
 
 export const meta: MetaFunction = () => {
   return [
@@ -139,25 +139,15 @@ export default function Index() {
   );
 
   return (
-    <div
-      style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}
-      className="p-4 w-[600px] mx-auto"
-    >
-      <div className="flex justify-between items-center content-center">
-        <h1 className="text-xl">Github Trend</h1>
-      </div>
+    <div className="p-4 w-[600px] mx-auto">
+      <Header />
+
       {data.user.username ? (
-        <div className="flex">
-          <div>hello, {data.user.username}</div>
-          <Form method="post" action="/logout">
-            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-            <button type="submit" className="text-blue-400 ml-4">
-              Logout
-            </button>
-          </Form>
+        <div className="flex px-1">
+          <div className="text-sm">hello, {data.user.username}</div>
         </div>
       ) : (
-        <div className="text-blue-400">
+        <div className="text-blue-400 px-1">
           <Link to="/signin">Login</Link>
         </div>
       )}
