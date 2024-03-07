@@ -5,19 +5,11 @@ import {
   type MetaFunction,
 } from "@remix-run/node";
 import { useFetcher, useLoaderData, useNavigation } from "@remix-run/react";
-import { fetchRepositories, TRepository } from "~/db/home.server";
+import { fetchRepositories } from "~/db/home.server";
 import { requireUser } from "~/session.session";
 import { addLike, fetchLike, updateLike } from "~/db/like.server";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableColumn,
-  TableHeader,
-  TableRow,
-} from "@nextui-org/react";
-import React, { Key } from "react";
 import Header from "~/components/Header";
+import { Card } from "@nextui-org/card";
 
 export const meta: MetaFunction = () => {
   return [
@@ -60,109 +52,61 @@ export const action = async (c: ActionFunctionArgs) => {
   return null;
 };
 
-const columns = [
-  {
-    key: "star",
-    label: "Star",
-  },
-  {
-    key: "language",
-    label: "Language",
-  },
-  {
-    key: "like",
-    label: "Like",
-  },
-  {
-    key: "name",
-    label: "Name",
-  },
-];
-
 export default function Index() {
   const data = useLoaderData<typeof loader>();
   const fetcher = useFetcher();
 
   const navigation = useNavigation();
 
-  const onFavor = React.useCallback(
-    (id: number, favor: string) => {
-      if (navigation.state === "submitting") return;
-      fetcher.submit(
-        { id, favor },
-        {
-          method: "post",
-        },
-      );
-    },
-    [fetcher, navigation],
-  );
-
-  const renderCell = React.useCallback(
-    (item: TRepository, columnKey: Key) => {
-      const cellValue = item[columnKey as keyof TRepository];
-
-      switch (columnKey) {
-        case "like": {
-          const like = fetcher.formData?.has("favor")
-            ? fetcher.formData?.get("favor") === "1"
-              ? 1
-              : 0
-            : item.like;
-          return (
-            // eslint-disable-next-line jsx-a11y/interactive-supports-focus
-            <div
-              role="button"
-              className="w-6 mr-6 cursor-pointer text-yellow-500"
-              onClick={() => onFavor(item.id, item.like === 1 ? "0" : "1")}
-              onKeyDown={() => onFavor(item.id, item.like === 1 ? "0" : "1")}
-            >
-              {like === 1 ? "★" : "☆"}
-            </div>
-          );
-        }
-        case "name":
-          return (
-            <a
-              target="_blank"
-              href={item.url!}
-              rel="noreferrer"
-              className="text-blue-400"
-            >
-              {item.name}
-            </a>
-          );
-        default:
-          return cellValue;
-      }
-    },
-    [fetcher, onFavor],
-  );
+  const onFavor = (id: number, favor: string) => {
+    if (navigation.state === "submitting") return;
+    fetcher.submit(
+      { id, favor },
+      {
+        method: "post",
+      },
+    );
+  };
 
   return (
     <div className="p-4 w-[600px] mx-auto">
       <Header />
 
-      <Table
-        removeWrapper
-        aria-label="Example table with dynamic content"
-        className="mt-4"
-      >
-        <TableHeader columns={columns}>
-          {(column) => (
-            <TableColumn key={column.key}>{column.label}</TableColumn>
-          )}
-        </TableHeader>
-        <TableBody items={data.repositories}>
-          {(item) => (
-            <TableRow key={item.id}>
-              {(columnKey) => (
-                <TableCell>{renderCell(item, columnKey)}</TableCell>
-              )}
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
+      <Card className="p-2 mt-4">
+        {data.repositories.map((repo) => {
+          let like = repo.like;
+          if (
+            fetcher.formData?.has("id") &&
+            fetcher.formData?.get("id") === String(repo.id)
+          ) {
+            like = fetcher.formData.get("favor") === "1" ? 1 : 0;
+          }
+          return (
+            <div key={repo.id} className="flex py-1">
+              <div className="w-8 shrink-0">
+                <button
+                  className="w-6 mr-6 cursor-pointer text-yellow-500"
+                  onClick={() => onFavor(repo.id, repo.like === 1 ? "0" : "1")}
+                >
+                  {like === 1 ? "★" : "☆"}
+                </button>
+              </div>
+              <div className="w-12 shrink-0 text-right mr-4">{repo.star}</div>
+              <div className="w-20 shrink-0">{repo.language}</div>
+              <div>
+                <a
+                  target="_blank"
+                  href={repo.url!}
+                  rel="noreferrer"
+                  className="text-blue-400"
+                >
+                  {repo.name}
+                </a>
+              </div>
+            </div>
+          );
+        })}
+      </Card>
     </div>
   );
 }
