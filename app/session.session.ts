@@ -22,7 +22,7 @@ export const userSessionStorage = createCookieSessionStorage<UserSessionData>({
 export async function createUserSession(
   userId: number,
   username: string,
-  redirectTo: string
+  redirectTo: string,
 ) {
   const session = await userSessionStorage.getSession();
   session.set("userId", userId);
@@ -41,7 +41,7 @@ function getUserSession(request: Request) {
 
 export async function requireUser(
   request: Request,
-  redirectTo: string = new URL(request.url).pathname
+  redirectTo: string = new URL(request.url).pathna,
 ) {
   const session = await getUserSession(request);
   const userId = session.get("userId");
