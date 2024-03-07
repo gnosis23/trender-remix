@@ -103,7 +103,12 @@ export default function Index() {
       const cellValue = item[columnKey as keyof TRepository];
 
       switch (columnKey) {
-        case "like":
+        case "like": {
+          const like = fetcher.formData?.has("favor")
+            ? fetcher.formData?.get("favor") === "1"
+              ? 1
+              : 0
+            : item.like;
           return (
             // eslint-disable-next-line jsx-a11y/interactive-supports-focus
             <div
@@ -112,9 +117,10 @@ export default function Index() {
               onClick={() => onFavor(item.id, item.like === 1 ? "0" : "1")}
               onKeyDown={() => onFavor(item.id, item.like === 1 ? "0" : "1")}
             >
-              {item.like === 1 ? "★" : "☆"}
+              {like === 1 ? "★" : "☆"}
             </div>
           );
+        }
         case "name":
           return (
             <a
@@ -130,7 +136,7 @@ export default function Index() {
           return cellValue;
       }
     },
-    [onFavor],
+    [fetcher, onFavor],
   );
 
   return (
