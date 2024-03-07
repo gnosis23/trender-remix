@@ -4,12 +4,7 @@ import {
   LoaderFunctionArgs,
   type MetaFunction,
 } from "@remix-run/node";
-import {
-  Link,
-  useFetcher,
-  useLoaderData,
-  useNavigation,
-} from "@remix-run/react";
+import { useFetcher, useLoaderData, useNavigation } from "@remix-run/react";
 import { fetchRepositories, TRepository } from "~/db/config.server";
 import { requireUser } from "~/session.session";
 import { addLike, fetchLike, updateLike } from "~/db/like.server";
@@ -141,16 +136,6 @@ export default function Index() {
   return (
     <div className="p-4 w-[600px] mx-auto">
       <Header />
-
-      {data.user.username ? (
-        <div className="flex px-1">
-          <div className="text-sm">hello, {data.user.username}</div>
-        </div>
-      ) : (
-        <div className="text-blue-400 px-1">
-          <Link to="/signin">Login</Link>
-        </div>
-      )}
 
       <Table
         removeWrapper
