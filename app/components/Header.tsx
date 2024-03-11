@@ -21,6 +21,9 @@ export default function Header() {
         <NavLink to="/like" className={linkClass}>
           Like
         </NavLink>
+        <NavLink to="/setting" className={linkClass}>
+          Setting
+        </NavLink>
       </div>
       <Form method="post" action="/logout">
         <button type="submit" className="ml-4 text-gray-400">
