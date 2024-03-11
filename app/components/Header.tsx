@@ -21,7 +21,7 @@ export default function Header() {
         <NavLink to="/like" className={linkClass}>
           Like
         </NavLink>
-        <NavLink to="/setting" className={linkClass}>
+        <NavLink to="/setting/basic" className={linkClass}>
           Setting
         </NavLink>
       </div>

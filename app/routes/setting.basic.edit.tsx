@@ -11,7 +11,7 @@ import {
   fetchBasicInfo,
   updateBasicInfo,
 } from "~/db/basic.server";
-import { Form, useLoaderData } from "@remix-run/react";
+import { Form, Link, useLoaderData, useNavigation } from "@remix-run/react";
 import { Button, Input } from "@nextui-org/react";
 
 export const loader = async (c: LoaderFunctionArgs) => {
@@ -40,17 +40,33 @@ export const action = async (c: ActionFunctionArgs) => {
 
 export default function BasicPageEdit() {
   const data = useLoaderData<typeof loader>();
+  const navigation = useNavigation();
 
   return (
     <Card className="p-4 min-h-[600px]">
-      <Form method="post" className="space-y-2">
+      <Form method="post" className="space-y-4">
         <Input
           label="Nick Name"
           name="nickName"
           defaultValue={data.basic?.nickName || ""}
         />
         <div className="text-center">
-          <Button type="submit">Submit</Button>
+          <Link to="/setting/basic">
+            <Button
+              className="mr-4"
+              disabled={navigation.state === "submitting"}
+            >
+              Cancel
+            </Button>
+          </Link>
+
+          <Button
+            type="submit"
+            color="warning"
+            disabled={navigation.state === "submitting"}
+          >
+            Submit
+          </Button>
         </div>
       </Form>
     </Card>
