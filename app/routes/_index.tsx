@@ -67,7 +67,7 @@ export default function Index() {
   };
 
   return (
-    <div className="p-4 w-[600px] mx-auto">
+    <div className="p-4 w-[960px] mx-auto">
       <Header />
 
       <Card className="p-2 mt-4">
@@ -81,7 +81,7 @@ export default function Index() {
           }
           return (
             <div key={repo.id} className="flex py-1 gap-x-1 text-sm">
-              <div className="w-8 shrink-0">
+              <div className="w-8 shrink-0 flex-grow-0">
                 <button
                   className="w-6 mr-6 cursor-pointer text-yellow-500"
                   onClick={() => onFavor(repo.id, repo.like === 1 ? "0" : "1")}
@@ -89,9 +89,22 @@ export default function Index() {
                   {like === 1 ? "★" : "☆"}
                 </button>
               </div>
-              <div className="w-12 shrink-0 text-right mr-4">{repo.star}</div>
-              <div className="w-20 shrink-0">{repo.language}</div>
-              <div>
+              <div className="w-12 shrink-0 flex-grow-0 text-right mr-4">
+                {repo.star}
+              </div>
+              <div className="w-24 shrink-0 flex-grow-0 text-right mr-4">
+                {repo.language}
+              </div>
+              <div className="">
+                <a
+                  target="_blank"
+                  href={repo.ownerUrl!}
+                  rel="noreferrer"
+                  className="text-blue-400"
+                >
+                  {repo.owner}
+                </a>
+                <span className="mx-2">|</span>
                 <a
                   target="_blank"
                   href={repo.url!}
