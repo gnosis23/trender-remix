@@ -38,3 +38,9 @@ export const LikeSchema = mysqlTable("like", {
   like: int("like").notNull(),
   created: timestamp("created").defaultNow(),
 });
+
+export const BasicInfoSchema = mysqlTable("basic_info", {
+  id: serial("id").primaryKey(),
+  userId: int("user_id").notNull(),
+  nickName: varchar("nick_name", { length: 64 }),
+});

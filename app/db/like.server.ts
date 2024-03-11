@@ -17,6 +17,8 @@ export const fetchMyLikes = async (userId: number) => {
       name: RepositorySchema.name,
       star: RepositorySchema.star,
       url: RepositorySchema.url,
+      owner: RepositorySchema.ownerName,
+      ownerUrl: RepositorySchema.ownerUrl,
       language: RepositorySchema.language,
       like: LikeSchema.like,
     })

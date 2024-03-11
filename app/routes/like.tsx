@@ -95,7 +95,7 @@ export default function Like() {
   );
 
   return (
-    <div className="p-4 w-[600px] mx-auto">
+    <div className="p-4 w-[960px] mx-auto">
       <Header />
 
       <Table
