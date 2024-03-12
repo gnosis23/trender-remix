@@ -8,7 +8,7 @@ import {
   useFetcher,
   useLoaderData,
   useNavigation,
-  useSubmit,
+  useSearchParams,
 } from "@remix-run/react";
 import { fetchRepositories } from "~/db/home.server";
 import { requireUser } from "~/session.session";
@@ -45,7 +45,6 @@ export const loader = async (c: LoaderFunctionArgs) => {
   return json({
     repositories,
     user,
-    tag,
   });
 };
 
@@ -72,16 +71,21 @@ export const action = async (c: ActionFunctionArgs) => {
 };
 
 export default function Index() {
-  const { repositories, tag } = useLoaderData<typeof loader>();
+  const { repositories } = useLoaderData<typeof loader>();
   const fetcher = useFetcher();
-  const submit = useSubmit();
+  const [searchParams, setSearchParams] = useSearchParams();
   const navigation = useNavigation();
+
+  const tag = searchParams.get("t");
   const searching =
     navigation.location &&
     new URLSearchParams(navigation.location.search).has("t");
 
   const onFilter = (tag: string) => {
-    submit({ t: tag }, { replace: true });
+    setSearchParams((prev) => {
+      prev.set("t", tag);
+      return prev;
+    });
   };
 
   const onFavor = (id: number, favor: string) => {
@@ -104,8 +108,8 @@ export default function Index() {
             key={key}
             className="cursor-pointer"
             color={key === tag ? "primary" : "default"}
-            isDisabled={searching}
             onClick={() => {
+              if (searching) return;
               onFilter(key === tag ? "" : key);
             }}
           >
