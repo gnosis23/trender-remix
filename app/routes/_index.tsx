@@ -131,22 +131,12 @@ export default function Index() {
               <div className="w-24 shrink-0 flex-grow-0 text-right mr-4">
                 {repo.language}
               </div>
-              <div className="">
-                <a
-                  target="_blank"
-                  href={repo.ownerUrl!}
-                  rel="noreferrer"
-                  className="text-blue-400"
-                >
+              <div className="text-blue-400">
+                <a target="_blank" href={repo.ownerUrl!} rel="noreferrer">
                   {repo.owner}
                 </a>
-                <span className="mx-2">|</span>
-                <a
-                  target="_blank"
-                  href={repo.url!}
-                  rel="noreferrer"
-                  className="text-blue-400"
-                >
+                <span className="mx-2">/</span>
+                <a target="_blank" href={repo.url!} rel="noreferrer">
                   {repo.name}
                 </a>
               </div>
