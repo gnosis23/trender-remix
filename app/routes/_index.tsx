@@ -4,12 +4,20 @@ import {
   LoaderFunctionArgs,
   type MetaFunction,
 } from "@remix-run/node";
-import { useFetcher, useLoaderData } from "@remix-run/react";
+import {
+  useFetcher,
+  useLoaderData,
+  useNavigation,
+  useSubmit,
+} from "@remix-run/react";
 import { fetchRepositories } from "~/db/home.server";
 import { requireUser } from "~/session.session";
 import { addLike, fetchLike, updateLike } from "~/db/like.server";
 import Header from "~/components/Header";
 import { Card } from "@nextui-org/card";
+import { Chip } from "@nextui-org/chip";
+
+const tags = ["Go", "JavaScript", "Python", "TypeScript"];
 
 export const meta: MetaFunction = () => {
   return [
@@ -20,13 +28,16 @@ export const meta: MetaFunction = () => {
 
 export const loader = async (c: LoaderFunctionArgs) => {
   const user = await requireUser(c.request);
+  const url = new URL(c.request.url);
+  const tag = url.searchParams.get("t");
   const date = new Date();
   date.setDate(date.getDate() - 3);
-  const repositories = await fetchRepositories(date, user.userId);
+  const repositories = await fetchRepositories(date, user.userId, tag);
 
   return json({
     repositories,
     user,
+    tag,
   });
 };
 
@@ -53,8 +64,17 @@ export const action = async (c: ActionFunctionArgs) => {
 };
 
 export default function Index() {
-  const data = useLoaderData<typeof loader>();
+  const { repositories, tag } = useLoaderData<typeof loader>();
   const fetcher = useFetcher();
+  const submit = useSubmit();
+  const navigation = useNavigation();
+  const searching =
+    navigation.location &&
+    new URLSearchParams(navigation.location.search).has("t");
+
+  const onFilter = (tag: string) => {
+    submit({ t: tag }, { replace: true });
+  };
 
   const onFavor = (id: number, favor: string) => {
     if (fetcher.state === "submitting") return;
@@ -70,8 +90,24 @@ export default function Index() {
     <div className="p-4 w-[960px] mx-auto">
       <Header />
 
+      <div className="space-x-2 mt-2">
+        {tags.map((key) => (
+          <Chip
+            key={key}
+            className="cursor-pointer"
+            color={key === tag ? "primary" : "default"}
+            isDisabled={searching}
+            onClick={() => {
+              onFilter(key === tag ? "" : key);
+            }}
+          >
+            {key}
+          </Chip>
+        ))}
+      </div>
+
       <Card className="p-2 mt-4">
-        {data.repositories.map((repo) => {
+        {repositories.map((repo) => {
           let like = repo.like;
           if (
             fetcher.formData?.has("id") &&
