@@ -12,12 +12,19 @@ export type TRepository = {
   like: number;
 };
 
-export const fetchRepositories = async (date: Date, userId: number) => {
+export const fetchRepositories = async (
+  date: Date,
+  userId: number,
+  tag: string | null,
+) => {
   const like = db
     .select()
     .from(LikeSchema)
     .where(eq(LikeSchema.userId, userId))
     .as("like");
+  const cond = tag
+    ? eq(RepositorySchema.language, tag)
+    : isNotNull(RepositorySchema.language);
   return db
     .select({
       id: RepositorySchema.id,
@@ -31,12 +38,7 @@ export const fetchRepositories = async (date: Date, userId: number) => {
     })
     .from(RepositorySchema)
     .leftJoin(like, eq(RepositorySchema.id, like.repoId))
-    .where(
-      and(
-        gt(RepositorySchema.created, date),
-        isNotNull(RepositorySchema.language),
-      ),
-    )
+    .where(and(gt(RepositorySchema.created, date), cond))
     .orderBy(desc(RepositorySchema.star))
     .limit(50) as Promise<TRepository[]>;
 };
