@@ -17,7 +17,15 @@ import Header from "~/components/Header";
 import { Card } from "@nextui-org/card";
 import { Chip } from "@nextui-org/chip";
 
-const tags = ["Go", "JavaScript", "Python", "TypeScript"];
+const tags = [
+  "C++",
+  "Go",
+  "Java",
+  "JavaScript",
+  "Python",
+  "Swift",
+  "TypeScript",
+];
 
 export const meta: MetaFunction = () => {
   return [
