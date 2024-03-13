@@ -89,7 +89,7 @@ export default function NotePage() {
       <Header />
 
       <div className="flex gap-3 min-h-screen mt-4">
-        <div className="w-[360px]">navbar</div>
+        {/*<div className="w-[360px]">navbar</div>*/}
         <div className="flex-1">
           <Form method="POST">
             <div className="flex flex-col gap-3">
