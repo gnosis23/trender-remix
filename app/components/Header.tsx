@@ -21,6 +21,9 @@ export default function Header() {
         <NavLink to="/like" className={linkClass}>
           Like
         </NavLink>
+        <NavLink to="/note" className={linkClass}>
+          Note
+        </NavLink>
         <NavLink to="/setting/basic" className={linkClass}>
           Setting
         </NavLink>
