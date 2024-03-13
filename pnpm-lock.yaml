@@ -13,6 +13,7 @@ specifiers:
   "@typescript-eslint/eslint-plugin": ^6.7.4
   "@typescript-eslint/parser": ^6.7.4
   bcryptjs: ^2.4.3
+  dayjs: ^1.11.10
   drizzle-orm: ^0.29.4
   eslint: ^8.38.0
   eslint-import-resolver-typescript: ^3.6.1
@@ -37,6 +38,7 @@ dependencies:
   "@remix-run/react": 2.8.0_3lfo6mjrbe7gnpm2z32jgk7g6a
   "@remix-run/serve": 2.8.0_typescript@5.3.3
   bcryptjs: 2.4.3
+  dayjs: 1.11.10
   drizzle-orm: 0.29.4_myvgl3bpzenhmvetyfffl4ugmi
   framer-motion: 11.0.8_biqbaboplfbrettd7655fr4n2y
   isbot: 4.4.0
@@ -5748,6 +5750,13 @@ packages:
         integrity: sha512-WboRycPNsVw3B3TL559F7kuBUM4d8CgMEvk6xEJlOp7OBPjt6G7z8WMWlD2rOFZLk6OYfFIUGsCOWzcQH9K2og==,
       }
     engines: { node: ">= 6" }
+
+  /dayjs/1.11.10:
+    resolution:
+      {
+        integrity: sha512-vjAczensTgRcqDERK0SR2XMwsF/tSvnvlv6VcF2GIhg6Sx4yOIt/irsr1RDJsKiIyBzJDpCoXiWWq28MqH2cnQ==,
+      }
+    dev: false
 
   /debug/2.6.9:
     resolution:

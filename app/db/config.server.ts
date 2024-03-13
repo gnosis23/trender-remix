@@ -4,9 +4,12 @@ import {
   serial,
   timestamp,
   varchar,
+  char,
+  text,
 } from "drizzle-orm/mysql-core";
 import { drizzle } from "drizzle-orm/mysql2";
 import mysql from "mysql2/promise";
+import { sql } from "drizzle-orm";
 
 // Create the connection
 const poolConnection = mysql.createPool(process.env.DATABASE_URL as string);
@@ -43,4 +46,15 @@ export const BasicInfoSchema = mysqlTable("basic_info", {
   id: serial("id").primaryKey(),
   userId: int("user_id").notNull(),
   nickName: varchar("nick_name", { length: 64 }),
+});
+
+export const NoteSchema = mysqlTable("note", {
+  id: char("id", { length: 36 })
+    .primaryKey()
+    .default(sql`(uuid())`),
+  userId: int("user_id").notNull(),
+  content: text("content").notNull(),
+  createdAt: timestamp("created_at")
+    .notNull()
+    .default(sql`CURRENT_TIMESTAMP`),
 });
