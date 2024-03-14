@@ -151,7 +151,7 @@ export default function NotePage() {
                 className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
                 placeholder="现在的想法是..."
               />
-              <Button type="submit" color="primary">
+              <Button type="submit" color="primary" disabled={isUpdating}>
                 发布
               </Button>
             </div>

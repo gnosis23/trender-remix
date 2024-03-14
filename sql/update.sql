@@ -15,6 +15,6 @@ CREATE TABLE `note` (
 
 CREATE TABLE `tag` (
   `tag` VARCHAR(20) NOT NULL,
-  `note` CHAR(32) NOT NULL,
+  `note` CHAR(36) NOT NULL,
   `user_id` int NOT NULL,
   PRIMARY KEY (`tag`, `note`));
