@@ -12,3 +12,9 @@ CREATE TABLE `note` (
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 );
+
+CREATE TABLE `tag` (
+  `tag` VARCHAR(20) NOT NULL,
+  `note` CHAR(32) NOT NULL,
+  `user_id` int NOT NULL,
+  PRIMARY KEY (`tag`, `note`));

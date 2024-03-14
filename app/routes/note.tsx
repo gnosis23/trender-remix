@@ -7,17 +7,31 @@ import {
   CardHeader,
 } from "@nextui-org/react";
 import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
-import { Form, useFetcher, useLoaderData } from "@remix-run/react";
+import {
+  Form,
+  useFetcher,
+  useLoaderData,
+  useSearchParams,
+} from "@remix-run/react";
 import dayjs from "dayjs";
 import Header from "~/components/Header";
 import { requireUser } from "~/session.session";
-import { createNote, fetchNotes, SelectNoteType } from "~/db/note.server";
+import {
+  createNote,
+  fetchNotes,
+  fetchTags,
+  SelectNoteType,
+} from "~/db/note.server";
 import { useState } from "react";
 
 export const loader = async (c: LoaderFunctionArgs) => {
   const user = await requireUser(c.request);
-  const notes = await fetchNotes(user.userId);
-  return { notes };
+  const searchParams = new URL(c.request.url).searchParams;
+  const tag = searchParams.get("tag");
+
+  const notes = await fetchNotes(user.userId, tag);
+  const tags = await fetchTags(user.userId);
+  return { notes, tags };
 };
 
 export const action = async (c: ActionFunctionArgs) => {
@@ -82,14 +96,29 @@ const NoteCard = ({ note }: Props) => {
 };
 
 export default function NotePage() {
-  const { notes } = useLoaderData<typeof loader>();
+  const { notes, tags } = useLoaderData<typeof loader>();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   return (
     <div className="p-4 w-[960px] mx-auto">
       <Header />
 
       <div className="flex gap-3 min-h-screen mt-4">
-        {/*<div className="w-[360px]">navbar</div>*/}
+        <div className="w-[200px] flex flex-col gap-3">
+          {tags.map((item) => (
+            <Button
+              variant={searchParams.get("tag") === item.tag ? "solid" : "light"}
+              key={item.tag}
+              onClick={() =>
+                setSearchParams({
+                  tag: searchParams.get("tag") === item.tag ? "" : item.tag,
+                })
+              }
+            >
+              # {item.tag}
+            </Button>
+          ))}
+        </div>
         <div className="flex-1">
           <Form method="POST">
             <div className="flex flex-col gap-3">

@@ -58,3 +58,9 @@ export const NoteSchema = mysqlTable("note", {
     .notNull()
     .default(sql`CURRENT_TIMESTAMP`),
 });
+
+export const TagSchema = mysqlTable("tag", {
+  tag: varchar("tag", { length: 20 }).primaryKey().notNull(),
+  note: char("note", { length: 36 }).primaryKey().notNull(),
+  userId: int("user_id").notNull(),
+});
