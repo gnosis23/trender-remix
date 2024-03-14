@@ -39,7 +39,12 @@ export const fetchNotes = async (userId: number, tag: string | null) => {
 };
 
 export const fetchTags = async (userId: number) => {
-  return db.select().from(TagSchema).where(eq(TagSchema.userId, userId));
+  return db
+    .selectDistinct({
+      tag: TagSchema.tag,
+    })
+    .from(TagSchema)
+    .where(eq(TagSchema.userId, userId));
 };
 
 export const createNote = async (userId: number, content: string) => {
