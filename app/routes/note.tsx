@@ -11,6 +11,7 @@ import {
   Form,
   useFetcher,
   useLoaderData,
+  useNavigation,
   useSearchParams,
 } from "@remix-run/react";
 import dayjs from "dayjs";
@@ -22,7 +23,7 @@ import {
   fetchTags,
   SelectNoteType,
 } from "~/db/note.server";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export const loader = async (c: LoaderFunctionArgs) => {
   const user = await requireUser(c.request);
@@ -51,6 +52,12 @@ const NoteCard = ({ note }: Props) => {
   const isUpdating = fetcher.state === "submitting";
   const [isEditing, setIsEditing] = useState(false);
 
+  useEffect(() => {
+    if (!isUpdating) {
+      setIsEditing(false);
+    }
+  }, [isUpdating]);
+
   return (
     <Card className="p-3">
       <CardHeader>
@@ -75,22 +82,27 @@ const NoteCard = ({ note }: Props) => {
           <>{note.content}</>
         )}
       </CardBody>
-      <CardFooter>
-        <div className="flex gap-3">
-          <Button
-            size="sm"
-            variant="flat"
-            onClick={() => setIsEditing((x) => !x)}
-          >
-            {isEditing ? "取消" : "编辑"}
-          </Button>
-          <deleteFetcher.Form action={`/note/${note.id}/delete`} method="POST">
-            <Button type="submit" size="sm" color="danger">
-              删除
+      {!isEditing && (
+        <CardFooter>
+          <div className="flex gap-3">
+            <Button
+              size="sm"
+              variant="flat"
+              onClick={() => setIsEditing((x) => !x)}
+            >
+              {isEditing ? "取消" : "编辑"}
             </Button>
-          </deleteFetcher.Form>
-        </div>
-      </CardFooter>
+            <deleteFetcher.Form
+              action={`/note/${note.id}/delete`}
+              method="POST"
+            >
+              <Button type="submit" size="sm" color="danger">
+                删除
+              </Button>
+            </deleteFetcher.Form>
+          </div>
+        </CardFooter>
+      )}
     </Card>
   );
 };
@@ -98,6 +110,15 @@ const NoteCard = ({ note }: Props) => {
 export default function NotePage() {
   const { notes, tags } = useLoaderData<typeof loader>();
   const [searchParams, setSearchParams] = useSearchParams();
+  const inputRef = useRef<HTMLTextAreaElement>(null);
+  const navigation = useNavigation();
+  const isUpdating = navigation.state === "submitting";
+
+  useEffect(() => {
+    if (!isUpdating) {
+      if (inputRef.current) inputRef.current.value = "";
+    }
+  }, [isUpdating]);
 
   return (
     <div className="p-4 w-[960px] mx-auto">
@@ -114,6 +135,7 @@ export default function NotePage() {
                   tag: searchParams.get("tag") === item.tag ? "" : item.tag,
                 })
               }
+              className="justify-start"
             >
               # {item.tag}
             </Button>
@@ -122,9 +144,11 @@ export default function NotePage() {
         <div className="flex-1">
           <Form method="POST">
             <div className="flex flex-col gap-3">
-              <Textarea
+              <textarea
+                ref={inputRef}
                 name="content"
-                minRows={10}
+                rows={10}
+                className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
                 placeholder="现在的想法是..."
               />
               <Button type="submit" color="primary">
