@@ -24,7 +24,7 @@ export const fetchRepositories = async (
     .as("like");
   const cond = tag
     ? eq(RepositorySchema.language, tag)
-    : isNotNull(RepositorySchema.language);
+    : isNotNull(RepositorySchema.url);
   return db
     .select({
       id: RepositorySchema.id,
@@ -40,5 +40,5 @@ export const fetchRepositories = async (
     .leftJoin(like, eq(RepositorySchema.id, like.repoId))
     .where(and(gt(RepositorySchema.created, date), cond))
     .orderBy(desc(RepositorySchema.star))
-    .limit(50) as Promise<TRepository[]>;
+    .limit(100) as Promise<TRepository[]>;
 };

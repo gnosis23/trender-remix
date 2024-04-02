@@ -39,7 +39,7 @@ export const loader = async (c: LoaderFunctionArgs) => {
   const url = new URL(c.request.url);
   const tag = url.searchParams.get("t");
   const date = new Date();
-  date.setDate(date.getDate() - 3);
+  date.setDate(date.getDate() - 7);
   const repositories = await fetchRepositories(date, user.userId, tag);
 
   return json({
